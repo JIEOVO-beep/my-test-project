@@ -95,10 +95,14 @@ class TestPetAPI:
         assert get_resp.status_code == 404
 
     def test_add_pet_invalid_data(self):
-        """添加宠物 - 异常场景：空数据"""
-        resp = requests.post(f"{BASE_URL}/pet", json={})
-        # 期望返回 4xx 错误
+        """添加宠物 - 异常场景：发送非法 JSON 数据"""
+        resp = requests.post(f"{BASE_URL}/pet", data="not-json-data")
         assert resp.status_code >= 400
+
+    def test_get_pet_negative_id(self):
+        """查询宠物 - 异常场景：负数 ID"""
+        resp = requests.get(f"{BASE_URL}/pet/-1")
+        assert resp.status_code == 404
 
 
 class TestStoreAPI:
